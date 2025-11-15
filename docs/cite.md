@@ -1,5 +1,6 @@
 If you enjoy and use this repository on your works, please acknowledge our papers:
 
+https://arxiv.org/abs/2508.19665
 ```
 @INPROCEEDINGS{11165273,
   author={Pollo, Giovanni and Albu, Andrei Mihai and Burrello, Alessio and Pagliari, Daniele Jahier and Tesconi, Cristian and Panaro, Loris and Soldi, Dario and Autieri, Fabio and Vinco, Sara},
@@ -13,6 +14,7 @@ If you enjoy and use this repository on your works, please acknowledge our paper
   doi={10.1109/FDL68117.2025.11165273}}
 ```
 
+https://arxiv.org/abs/2508.20223
 ```
 @misc{albu2025integratingsystemctlmfmi,
       title={Integrating SystemC TLM into FMI 3.0 Co-Simulations with an Open-Source Approach}, 
