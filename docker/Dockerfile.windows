@@ -1,0 +1,76 @@
+FROM ubuntu:22.04
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Rome
+ENV PYTHONUNBUFFERED=1
+
+# Install system dependencies
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y \
+    autoconf \
+    automake \
+    build-essential \
+    cmake \
+    curl \
+    clang \
+    clang-format \
+    git \
+    python3 \
+    python3-pip \
+    zip \
+    sudo && \
+    rm -rf /var/lib/apt/lists/*
+
+# Build and install SystemC
+WORKDIR /
+COPY deps/systemc-2.3.3.tar /systemc.tar
+# Create a directory for systemc
+RUN mkdir /systemc
+
+# Extract the systemc.tar file avoiding the parent directory
+RUN tar -xvf systemc.tar -C /systemc --strip-components=1
+
+# Remove the systemc.tar file
+RUN rm systemc.tar
+
+# Change directory to systemc
+WORKDIR systemc
+
+# Configure SystemC
+RUN ./configure --prefix=/usr/local/systemc CXXFLAGS="-DSC_CPLUSPLUS=201402L"
+
+# Build SystemC 2.3.3
+RUN make -j4
+
+# Check SystemC 2.3.3
+RUN make check -j4
+
+# Install SystemC 2.3.3
+RUN make install -j4
+
+# Delete the systemc folder
+RUN rm -rf /systemc
+
+# Change the working directory to the root
+WORKDIR /
+
+# Create a default user for Windows compatibility
+RUN useradd -m -s /bin/bash developer && \
+    echo "export PATH=/home/developer/.local/bin:$PATH" >> /home/developer/.bashrc && \
+    echo "export LD_LIBRARY_PATH=/usr/local/systemc/lib-linux64:$LD_LIBRARY_PATH" >> /home/developer/.bashrc
+
+# Make the user a sudoer with no password
+RUN echo "developer ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+# Set environment variables for user
+ENV PATH="/home/developer/.local/bin:${PATH}"
+
+# Switch to non-root user and install Python packages
+USER developer
+WORKDIR /home/developer
+COPY --chown=developer:developer requirements.txt .
+RUN pip install --user -r requirements.txt
+RUN rm requirements.txt
+
+CMD ["/bin/bash"]

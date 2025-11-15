@@ -1,0 +1,31 @@
+type: "tlm" # "tlm" or "rtl"
+tlm:
+  tlm_modules_folder: "systemc_module/alu-tlm-combinatory"
+  tlm_top_level_module_payload_file_path: "systemc_module/alu-tlm-combinatory/payload.h"
+  tlm_top_level_module_header_file_path: "systemc_module/alu-tlm-combinatory/top.h"
+  tlm_top_level_module_payload_struct_name: "alu_data_t"
+  tlm_top_level_module_name: "Top"
+
+struct_output_file_path: "include/struct.h"
+xml_output_file_path: "modelDescription.xml"
+
+fmi_config:
+  fmiVersion: "3.0"
+  DefaultExperiment:
+    startTime: 0
+    stopTime: 10
+    stepSize: 0.1
+    resolution: "SC_NS"
+  CoSimulation:
+    canGetAndSetFMUState: "true"
+    canSerializeFMUState: "true"
+    canHandleVariableCommunicationStepSize: "true"
+    providesIntermediateUpdate: "true"
+    canReturnEarlyAfterIntermediateUpdate: "true"
+    fixedInternalStepSize: 0.1
+    hasEventMode: "true"
+  LogCategories:
+    - name: "logEvents"
+      description: "Log events"
+    - name: "logStatusError"
+      description: "Log error messages"

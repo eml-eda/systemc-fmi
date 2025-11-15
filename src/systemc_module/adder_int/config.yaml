@@ -1,0 +1,30 @@
+type: "rtl" # "tlm" or "rtl"
+rtl:
+  systemc_modules_folder: "systemc_module/adder_int"
+  systemc_top_level_module_source_file_path: "systemc_module/adder_int/adder_int.cpp"
+  systemc_top_level_module_header_file_path: "systemc_module/adder_int/adder_int.h"
+  systemc_top_level_module_name: "ADDER_INT"
+
+struct_output_file_path: "include/struct.h"
+xml_output_file_path: "modelDescription.xml"
+
+fmi_config:
+  fmiVersion: "3.0"
+  DefaultExperiment:
+    startTime: 0
+    stopTime: 10
+    stepSize: 0.1
+    resolution: "SC_NS"
+  CoSimulation:
+    canGetAndSetFMUState: "true"
+    canSerializeFMUState: "true"
+    canHandleVariableCommunicationStepSize: "true"
+    providesIntermediateUpdate: "true"
+    canReturnEarlyAfterIntermediateUpdate: "true"
+    fixedInternalStepSize: 0.1
+    hasEventMode: "true"
+  LogCategories:
+    - name: "logEvents"
+      description: "Log events"
+    - name: "logStatusError"
+      description: "Log error messages"
