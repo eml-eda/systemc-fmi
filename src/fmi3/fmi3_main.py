@@ -1,5 +1,6 @@
 from fmi3.base_fmi3_module import BaseFMI3Module
 
+
 class fmi3Main(BaseFMI3Module):
     def __init__(self):
         template = """
@@ -17,7 +18,7 @@ class fmi3Main(BaseFMI3Module):
     def generate(self, config: dict):
         self.config = config
         return self.format_code(style="LLVM")
-    
+
     def write_to_file(self, path: str = "src") -> None:
         filename = f"{path}/main.cpp"
         with open(filename, "w") as file:

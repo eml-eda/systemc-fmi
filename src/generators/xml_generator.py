@@ -14,9 +14,10 @@ class SystemCPort:
     name: str
     width: int = None
 
+
 @dataclass
 class TLMPayloadField:
-    direction: str # 'in', 'out'
+    direction: str  # 'in', 'out'
     data_type: str
     name: str
     width: int = None
@@ -71,7 +72,9 @@ class TLMParser:
         self.module_name = "Top"
         self.ports = []
 
-    def parse_payload_file(self, content: str, payload_name: str) -> List[TLMPayloadField]:
+    def parse_payload_file(
+        self, content: str, payload_name: str
+    ) -> List[TLMPayloadField]:
         """Parse a TLM payload structure from a header file."""
         # Find the struct or typedef struct definition
         struct_pattern = r"typedef\s+struct\s+{([\s\S]*?)}\s*" + payload_name + ";"
@@ -80,14 +83,14 @@ class TLMParser:
             # Try alternative pattern without typedef
             struct_pattern = r"struct\s+" + payload_name + "\s+{([\s\S]*?)};"
             struct_match = re.search(struct_pattern, content)
-            
+
         if struct_match:
             struct_body = struct_match.group(1)
-            
+
             # Extract fields - updated pattern to ignore direction declarations
             field_pattern = r"(\w+)\s+(\w+)(?:\s*\[\s*(\d+)\s*\])?;"
             field_matches = re.finditer(field_pattern, struct_body)
-            
+
             # First collect all fields
             field_data = {}
             for match in field_matches:
@@ -96,12 +99,16 @@ class TLMParser:
                 if name.endswith("_dir"):
                     continue
                 width = int(array_size) if array_size else None
-                field_data[name] = {"data_type": data_type, "width": width, "direction": None}
-                
+                field_data[name] = {
+                    "data_type": data_type,
+                    "width": width,
+                    "direction": None,
+                }
+
             # Now look for direction information
             dir_pattern = r"PortDirection\s+(\w+)_dir\s*=\s*(PORT_\w+);"
             dir_matches = re.finditer(dir_pattern, struct_body)
-            
+
             for match in dir_matches:
                 field_name, direction = match.groups()
                 if field_name in field_data:
@@ -110,20 +117,24 @@ class TLMParser:
                         "PORT_INPUT": "in",
                         "PORT_OUTPUT": "out",
                     }
-                    field_data[field_name]["direction"] = direction_map.get(direction, "unknown")
-            
+                    field_data[field_name]["direction"] = direction_map.get(
+                        direction, "unknown"
+                    )
+
             # Convert to TLMPayloadField objects
             self.ports = []
             for name, data in field_data.items():
-                self.ports.append(TLMPayloadField(
-                    name=name, 
-                    data_type=data["data_type"], 
-                    width=data["width"],
-                    direction=data["direction"]
-                ))
-        
+                self.ports.append(
+                    TLMPayloadField(
+                        name=name,
+                        data_type=data["data_type"],
+                        width=data["width"],
+                        direction=data["direction"],
+                    )
+                )
+
         return self.ports  # Return the payload fields
-    
+
 
 class FMIGenerator:
     def __init__(self, parser: SystemCParser | TLMParser, config: dict):
@@ -284,28 +295,31 @@ class FMIGenerator:
         # Insert the comment at the beginning of the XML
         dom.insertBefore(comment, dom.documentElement)
         return dom.toprettyxml(indent="  ")
-    
+
     def __get_systemc_top_level_module_header_file_name(self) -> str:
         """Extract the header file name from the full file path of the SystemC top-level module.
 
         :returns: The file name of the SystemC top-level module header file without the path.
         :rtype: str
-        
+
         :note: This method assumes that the "systemc_top_level_module_header_file_path" key
                exists in the configuration dictionary and contains a valid file path.
                It uses standard path manipulation by splitting on '/' characters and
                taking the last element, which works on Unix-like systems and Windows
                when using forward slashes in paths.
-        
+
         :example:
-            If self.config["systemc_top_level_module_header_file_path"] is 
+            If self.config["systemc_top_level_module_header_file_path"] is
             "/path/to/module_name.h", this method will return "module_name.h"
         """
-        return self.config["rtl"]["systemc_top_level_module_header_file_path"].split("/")[-1]
-    
+        return self.config["rtl"]["systemc_top_level_module_header_file_path"].split(
+            "/"
+        )[-1]
+
     def __get_tlm_top_level_module_payload_file_name(self) -> str:
-        return self.config["tlm"]["tlm_top_level_module_header_file_path"].split("/")[-1]
-    
+        return self.config["tlm"]["tlm_top_level_module_header_file_path"].split("/")[
+            -1
+        ]
 
     def generate_struct(self) -> str:
         struct_name = self.parser.module_name.upper() + "_SYSC"
@@ -357,7 +371,7 @@ class FMIGenerator:
                 c_type = "fmi3Float64"
             else:
                 raise ValueError(f"Unsupported data type: {port.data_type}")
-            
+
             struct_lines.append(f"    {c_type} {port.name};")
 
         struct_lines.append("\n    // SystemC variables")
@@ -366,16 +380,20 @@ class FMIGenerator:
             f"    {self.parser.module_name} *new_{self.parser.module_name};"
         )
         struct_lines.append("\n    // signals declaration")
-        
+
         port: SystemCPort
         for port in self.parser.ports:
             if port.data_type == "bool":
                 struct_lines.append(f"    sc_signal<bool> s_{port.name};")
             elif port.data_type == "uint":
-                struct_lines.append(f"    sc_signal<sc_uint<{port.width}>> s_{port.name};")
+                struct_lines.append(
+                    f"    sc_signal<sc_uint<{port.width}>> s_{port.name};"
+                )
             elif port.data_type == "int":
                 if port.width is not None:
-                    struct_lines.append(f"    sc_signal<sc_int<{port.width}>> s_{port.name};")
+                    struct_lines.append(
+                        f"    sc_signal<sc_int<{port.width}>> s_{port.name};"
+                    )
                 else:
                     struct_lines.append(f"    sc_signal<int> s_{port.name};")
             elif port.data_type == "float":
@@ -387,7 +405,7 @@ class FMIGenerator:
 
         struct_lines.append("};")
         return "\n".join(struct_lines)
-    
+
     def generate_struct_tlm(self) -> str:
         struct_name = self.parser.module_name.upper() + "_SYSC"
         struct_lines = [
@@ -458,30 +476,34 @@ def generate_fmi_xml(systemc_content: str, config: dict) -> str:
     generator = FMIGenerator(parser=parser, config=config)
     return generator.generate_xml()
 
+
 def generate_fmi_xml_tlm(tlm_content: str, config: dict) -> str:
     parser = TLMParser()
     parser.parse_payload_file(
         content=tlm_content,
-        payload_name=config["tlm"]["tlm_top_level_module_payload_struct_name"]
+        payload_name=config["tlm"]["tlm_top_level_module_payload_struct_name"],
     )
 
     generator = FMIGenerator(parser=parser, config=config)
     return generator.generate_xml()
 
+
 def generate_struct(systemc_content: str, config: dict) -> str:
     parser = SystemCParser()
     parser.parse_systemc_file(
-        content=systemc_content, module_name=config["rtl"]["systemc_top_level_module_name"]
+        content=systemc_content,
+        module_name=config["rtl"]["systemc_top_level_module_name"],
     )
 
     generator = FMIGenerator(parser=parser, config=config)
     return generator.generate_struct()
 
+
 def generate_struct_tlm(tlm_content: str, config: dict) -> str:
     parser = TLMParser()
     parser.parse_payload_file(
         content=tlm_content,
-        payload_name=config["tlm"]["tlm_top_level_module_payload_struct_name"]
+        payload_name=config["tlm"]["tlm_top_level_module_payload_struct_name"],
     )
 
     generator = FMIGenerator(parser=parser, config=config)

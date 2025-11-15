@@ -1,0 +1,16 @@
+venv
+build
+*.csv
+*.png
+*.prof
+*.fmu
+*.so
+__pycache__
+src/src
+src/build.sh
+src/include/*
+!src/include/fmi3Functions.h
+!src/include/fmi3FunctionTypes.h
+!src/include/fmi3PlatformTypes.h
+src/modelDescription.xml
+CMakeLists.txt

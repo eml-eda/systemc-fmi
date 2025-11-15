@@ -9,6 +9,7 @@ def generate_all_modules(config: dict):
     generate_all_others(config=config)
     generate_all_setters(config=config)
 
+
 def generate_all_getters(config: dict):
     """Generate and write code for all FMI3 getters"""
     for module in getters_modules:
@@ -19,6 +20,7 @@ def generate_all_getters(config: dict):
         else:
             print(f"Failed to generate {module.__class__.__name__}")
 
+
 def generate_all_others(config: dict):
     """Generate and write code for all FMI3 others"""
     for module in other_modules:
@@ -28,6 +30,7 @@ def generate_all_others(config: dict):
             print(f"Generated {filename}")
         else:
             print(f"Failed to generate {module.__class__.__name__}")
+
 
 def generate_all_setters(config: dict):
     """Generate and write code for all FMI3 setters"""
@@ -46,6 +49,7 @@ def debug_single_module():
     # from fmi3.fmi3DoStep import fmi3DoStep
     # from fmi3.fmi3GetFloat32 import fmi3GetFloat32
     from fmi3.fmi3InstantiateCoSimulation import fmi3InstantiateCoSimulation
+
     # module = fmi3DoStep(
     #     struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
     # )
@@ -65,12 +69,11 @@ def debug_single_module():
         print(f"Failed to generate {module.__class__.__name__}")
 
 
-
 if __name__ == "__main__":
     print("Generating FMI3 module implementations...")
     generate_all_modules()
     # debug_single_module()
-    
+
     # generate_all_getters()
     # generate_all_others()
     # generate_all_setters()

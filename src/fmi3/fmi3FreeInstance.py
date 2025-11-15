@@ -30,12 +30,8 @@ class fmi3FreeInstance(BaseFMI3Module):
 
         struct_name = self.get_struct_name(struct_content)
 
-        custom_code = self.generate_custom_code(
-            struct_name=struct_name
-        )
-        self.template = self.template.format(
-            custom_code=custom_code
-        )
+        custom_code = self.generate_custom_code(struct_name=struct_name)
+        self.template = self.template.format(custom_code=custom_code)
         return self.format_code(style="LLVM")
 
     def get_struct_name(self, struct_content):

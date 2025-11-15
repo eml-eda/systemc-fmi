@@ -25,7 +25,7 @@ class fmi3GetShiftDecimal(BaseFMI3Module):
             "nValueReferences",
             "shifts",
         ]
-        
+
         unused_macros = self.generate_unused_macros(unsed_params)
 
         self.template = self.template.format(unused_macros=unused_macros)

@@ -34,20 +34,38 @@ from typing import List
 
 getters_modules: List[BaseFMI3Getter] = [
     fmi3GetAdjointDerivative(),
-    fmi3GetBinary(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3GetBoolean(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3GetClock(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3GetBinary(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3GetBoolean(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3GetClock(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3GetContinuousStateDerivatives(),
     fmi3GetContinuousStates(),
     fmi3GetDirectionalDerivative(),
     fmi3GetEventIndicators(),
-    fmi3GetFloat32(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3GetFloat64(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3GetFloat32(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3GetFloat64(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3GetFMUState(),
-    fmi3GetInt16(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3GetInt32(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3GetInt64(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3GetInt8(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3GetInt16(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3GetInt32(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3GetInt64(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3GetInt8(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3GetIntervalDecimal(),
     fmi3GetIntervalFraction(),
     fmi3GetNominalsOfContinuousStates(),
@@ -57,11 +75,21 @@ getters_modules: List[BaseFMI3Getter] = [
     fmi3GetOutputDerivatives(),
     fmi3GetShiftDecimal(),
     fmi3GetShiftFraction(),
-    fmi3GetString(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3GetUInt16(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3GetUInt32(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3GetUInt64(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3GetUInt8(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3GetString(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3GetUInt16(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3GetUInt32(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3GetUInt64(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3GetUInt8(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3GetVariableDependencies(),
-    fmi3GetVersion()
+    fmi3GetVersion(),
 ]

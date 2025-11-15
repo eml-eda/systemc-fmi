@@ -49,7 +49,9 @@ class fmi3DoStep(BaseFMI3Module):
                 variables=variables, struct_name=struct_name, config=config
             )
         elif config["type"] == "tlm":
-            custom_code = self.generate_custom_code_tlm(variables=variables, struct_name=struct_name, config=config)
+            custom_code = self.generate_custom_code_tlm(
+                variables=variables, struct_name=struct_name, config=config
+            )
         self.template = self.template.format(custom_code=custom_code)
         return self.format_code(style="LLVM")
 
@@ -100,30 +102,31 @@ class fmi3DoStep(BaseFMI3Module):
                 f"fmu->{variable} = fmu->{systemc_module_name}->{variable}.read();\n"
             )
         return custom_code
-    
+
     def generate_custom_code_tlm(self, variables, struct_name, config):
         custom_code = ""
         custom_code += f"{struct_name} *fmu = ({struct_name} *)instance;\n\n"
         custom_code += f"sc_time step_size(communicationStepSize, SC_SEC);\n"
         custom_code += f"sc_time next_time = fmu->current_time + step_size;\n\n"
-        custom_code += f"{config['tlm']['tlm_top_level_module_payload_struct_name']} payload;\n"
-        
+        custom_code += (
+            f"{config['tlm']['tlm_top_level_module_payload_struct_name']} payload;\n"
+        )
+
         # Remove "current_time" from variables
         variables.remove("current_time")
         tlm_top_module_name: str = variables[-1]
         variables.remove(tlm_top_module_name)
         for variable in variables:
             custom_code += f"payload.{variable} = fmu->{variable};\n"
-        
+
         custom_code += f"\n{config['tlm']['tlm_top_level_module_payload_struct_name']} result = fmu->{tlm_top_module_name}->send_data(payload);\n"
 
         for variable in variables:
             custom_code += f"fmu->{variable} = result.{variable};\n"
 
         custom_code += "\nfmu -> current_time = next_time;\n\n"
-        
-        return custom_code
 
+        return custom_code
 
 
 if __name__ == "__main__":

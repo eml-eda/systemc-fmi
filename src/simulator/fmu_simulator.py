@@ -84,9 +84,13 @@ class FMUSimulator:
                     elif info["type"] == "Int64":
                         self.fmu.setInt64([self.vrs[var_name]], [int(info["start"])])
                     elif info["type"] == "Float32":
-                        self.fmu.setFloat32([self.vrs[var_name]], [float(info["start"])])
+                        self.fmu.setFloat32(
+                            [self.vrs[var_name]], [float(info["start"])]
+                        )
                     elif info["type"] == "Float64":
-                        self.fmu.setFloat64([self.vrs[var_name]], [float(info["start"])])
+                        self.fmu.setFloat64(
+                            [self.vrs[var_name]], [float(info["start"])]
+                        )
                     elif info["type"] == "Boolean":
                         self.fmu.setBoolean([self.vrs[var_name]], [bool(info["start"])])
                     else:
@@ -181,7 +185,7 @@ class FMUSimulator:
     ) -> None:
         """
         Register an interrupt condition and its handler.
-        
+
         Args:
             name: Name of the interrupt
             condition: Dictionary containing condition details (variable name and expected value)
@@ -194,27 +198,27 @@ class FMUSimulator:
     def check_interrupts(self) -> List[str]:
         """
         Check if any registered interrupts are triggered.
-        
+
         Returns:
             List[str]: List of triggered interrupt names
         """
         triggered: List[str] = []
-        
+
         # Initialize previous values dict if it doesn't exist
-        if not hasattr(self, 'prev_values'):
+        if not hasattr(self, "prev_values"):
             self.prev_values: Dict[str, Any] = {}
-        
+
         for int_name, condition in self.interrupt_conditions.items():
             var_name: str = int_name  # By default, interrupt name is the variable name
             expected_value: Any = condition.get("value")
             # If the variable exists in the model
             if var_name in self.variable_info:
                 current_value: Any = self.get_variable(name=var_name)
-                
+
                 # Initialize previous value if not already present
                 if var_name not in self.prev_values:
                     self.prev_values[var_name] = current_value
-                
+
                 # Handle edge detection
                 if expected_value == "posedge":
                     # Positive edge detection (transition from 0 to 1)
@@ -227,17 +231,26 @@ class FMUSimulator:
                 # Handle regular value comparison
                 elif current_value == expected_value:
                     triggered.append(int_name)
-                
+
                 # Update previous value for next comparison
                 self.prev_values[var_name] = current_value
-                    
+
         return triggered
-    
+
     def run_simulation(self):
         time = self.start_time
-        csv_data = ["Time," + ",".join(self.input_schedules.keys()) + "," + 
-                    ",".join([var_name for var_name, info in self.variable_info.items() 
-                             if info["causality"] == "output"])]
+        csv_data = [
+            "Time,"
+            + ",".join(self.input_schedules.keys())
+            + ","
+            + ",".join(
+                [
+                    var_name
+                    for var_name, info in self.variable_info.items()
+                    if info["causality"] == "output"
+                ]
+            )
+        ]
 
         # Print header
         print("\n=== Starting Simulation ===")
@@ -276,7 +289,7 @@ class FMUSimulator:
             csv_data.append(",".join(row_values))
 
             time += self.step_size
-            
+
             # Check for interrupts after the step
             triggered_interrupts = self.check_interrupts()
             if triggered_interrupts:
@@ -291,11 +304,9 @@ class FMUSimulator:
                 communicationStepSize=self.step_size,
             )
 
-
-
         print("\n=== Simulation Complete ===")
         self.fmu.terminate()
         self.fmu.freeInstance()
-        
+
         # Return CSV-like data as a string
         return "\n".join(csv_data)

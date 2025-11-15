@@ -28,7 +28,9 @@ other_modules: List[BaseFMI3Module] = [
     fmi3ActivateModelPartition(),
     fmi3CompletedIntegratorStep(),
     fmi3DeserializeFMUState(),
-    fmi3DoStep(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3DoStep(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3EnterConfigurationMode(),
     fmi3EnterContinuousTimeMode(),
     fmi3EnterEventMode(),
@@ -37,9 +39,13 @@ other_modules: List[BaseFMI3Module] = [
     fmi3EvaluateDiscreteStates(),
     fmi3ExitConfigurationMode(),
     fmi3ExitInitializationMode(),
-    fmi3FreeInstance(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3FreeInstance(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3FreeFMUState(),
-    fmi3InstantiateCoSimulation(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3InstantiateCoSimulation(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3InstantiateModelExchange(),
     fmi3InstantiateScheduledExecution(),
     fmi3Reset(),
@@ -47,5 +53,5 @@ other_modules: List[BaseFMI3Module] = [
     fmi3SerializedFMUStateSize(),
     fmi3Terminate(),
     fmi3UpdateDiscreteStates(),
-    fmi3Main()
+    fmi3Main(),
 ]

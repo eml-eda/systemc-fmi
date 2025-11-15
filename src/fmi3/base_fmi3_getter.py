@@ -2,6 +2,7 @@ from fmi3.base_fmi3_module import BaseFMI3Module
 import re
 import xml.etree.ElementTree as ET
 
+
 class BaseFMI3Getter(BaseFMI3Module):
     def __init__(self, var_type: str, struct_file_path=None, xml_file_path=None):
         template = r"""
@@ -18,13 +19,13 @@ class BaseFMI3Getter(BaseFMI3Module):
 }
 """
         template = template % {
-            'type': var_type,
-            'enum_definitions': '%(enum_definitions)s',
-            'custom_code': '%(custom_code)s'
+            "type": var_type,
+            "enum_definitions": "%(enum_definitions)s",
+            "custom_code": "%(custom_code)s",
         }
-        
+
         self.var_type = var_type
-        
+
         super().__init__(
             template=template,
             includes=["struct.h"] if struct_file_path else None,
@@ -36,12 +37,12 @@ class BaseFMI3Getter(BaseFMI3Module):
         """Find variables of specified type in struct content"""
         var_pattern = rf"fmi3{self.var_type}\s+(\w+);"
         return [match.group(1) for match in re.finditer(var_pattern, struct_content)]
-    
+
     def get_struct_name(self, struct_content):
         struct_pattern = r"struct\s+(\w+)"
         match = re.search(struct_pattern, struct_content)
         return match.group(1)
-    
+
     def parse_xml(self, xml_path):
         """Parse modelDescription.xml to extract variables of specified type"""
         try:
@@ -56,7 +57,7 @@ class BaseFMI3Getter(BaseFMI3Module):
             return vars_dict
         except Exception as e:
             raise Exception(f"Error parsing XML file: {e}")
-        
+
     def generate_enum_definitions(self, xml_vr):
         """Generate enum definitions for value references"""
         enum_lines = []
@@ -66,7 +67,7 @@ class BaseFMI3Getter(BaseFMI3Module):
             enum_lines.append(f"    VR_{var_name.upper()} = {value_ref},")
         enum_lines.append("};")
         return "\n".join(enum_lines)
-    
+
     def generate_custom_code(self, variables, xml_vr, struct_name):
         """Generate the custom code for getter"""
         custom_code = f"{struct_name} *fmu = ({struct_name} *)instance;\n\n"

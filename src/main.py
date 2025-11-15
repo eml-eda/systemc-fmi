@@ -1,19 +1,34 @@
 import argparse
 from simulator.fmu_simulator import FMUSimulator
 import yaml
-from generators.xml_generator import generate_fmi_xml, generate_fmi_xml_tlm, generate_struct, generate_struct_tlm, write_to_file
+from generators.xml_generator import (
+    generate_fmi_xml,
+    generate_fmi_xml_tlm,
+    generate_struct,
+    generate_struct_tlm,
+    write_to_file,
+)
 from generators.generate_fmi3_code import generate_all_modules
-from compile_fmu.compile_fmu import run_build_script_bash, generate_build_script_bash, run_build_script_cmake, generate_build_script_cmake
+from compile_fmu.compile_fmu import (
+    run_build_script_bash,
+    generate_build_script_bash,
+    run_build_script_cmake,
+    generate_build_script_cmake,
+)
 import sys
+
 
 def isr_zero():
     print("[ZERO] Interrupt handled")
 
+
 def isr_carry():
     print("[CARRY] Interrupt handled")
 
+
 def isr_result():
     print("[RESULT] Interrupt handled")
+
 
 def load_stimuli(file_path: str) -> dict:
     with open(file_path, "r") as f:
@@ -39,14 +54,16 @@ def simulate_fmu(fmu_path: str, stop_time: float, step_size: float, stimuli_path
             time = 0
             while time < stop_time:
                 schedule[time] = 0
-                time += period/2
+                time += period / 2
                 schedule[time] = 1
-                time += period/2
+                time += period / 2
         if signal.lower() != "interrupt":
             simulator.set_input_schedule(signal, schedule)
         else:
             for interrupt, condition in stimuli[signal].items():
-                simulator.register_interrupt(name=interrupt, condition=condition, handler=eval(condition["isr"]))
+                simulator.register_interrupt(
+                    name=interrupt, condition=condition, handler=eval(condition["isr"])
+                )
 
     csv_output = simulator.run_simulation()
     return csv_output
@@ -85,7 +102,6 @@ def generate_xml_struct(config: dict):
 
         struct_output = generate_struct_tlm(tlm_content=tlm_payload, config=config)
         write_to_file(struct_output, config["struct_output_file_path"])
-
 
 
 def main():
@@ -183,17 +199,16 @@ def main():
         if not run_build_script_bash():
             sys.exit(1)
 
-
     csv_output = simulate_fmu(
         fmu_path=args.fmu_path,
         stop_time=args.stop_time,
         step_size=args.step_size,
         stimuli_path=args.stimuli_path,
     )
-    
+
     with open("output.csv", "w") as file:
         file.write(csv_output)
-    
+
     return csv_output
 
 

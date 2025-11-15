@@ -24,26 +24,54 @@ from fmi3.fmi3SetFMUState import fmi3SetFMUState
 from typing import List
 
 setter_modules: List[BaseFMI3Setter] = [
-    fmi3SetBinary(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3SetBoolean(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3SetClock(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3SetBinary(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3SetBoolean(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3SetClock(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3SetContinuousStates(),
     fmi3SetDebugLogging(),
-    fmi3SetFloat32(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3SetFloat64(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3SetInt16(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3SetInt32(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3SetInt64(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3SetInt8(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3SetFloat32(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3SetFloat64(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3SetInt16(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3SetInt32(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3SetInt64(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3SetInt8(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3SetIntervalDecimal(),
     fmi3SetIntervalFraction(),
     fmi3SetShiftDecimal(),
     fmi3SetShiftFraction(),
-    fmi3SetString(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3SetString(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3SetTime(),
-    fmi3SetUInt16(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3SetUInt32(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3SetUInt64(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
-    fmi3SetUInt8(struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"),
+    fmi3SetUInt16(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3SetUInt32(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3SetUInt64(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
+    fmi3SetUInt8(
+        struct_file_path="include/struct.h", xml_file_path="modelDescription.xml"
+    ),
     fmi3SetFMUState(),
 ]

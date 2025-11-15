@@ -49,7 +49,7 @@ class fmi3SetClock(BaseFMI3Module):
         else:
             enum_definitions = ""
             custom_code = ""
-            
+
         self.template = self.template.format(
             custom_code=custom_code, enum_definitions=enum_definitions
         )
@@ -128,5 +128,7 @@ class fmi3SetClock(BaseFMI3Module):
 
 if __name__ == "__main__":
     """Test the generator"""
-    generator = fmi3SetClock(struct_file_path="prova_struct.h", xml_file_path="modelDescription.xml")
+    generator = fmi3SetClock(
+        struct_file_path="prova_struct.h", xml_file_path="modelDescription.xml"
+    )
     print(generator.generate())

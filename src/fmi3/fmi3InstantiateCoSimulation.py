@@ -26,7 +26,12 @@ fmi3Instance fmi3InstantiateCoSimulation(
 """
         self.xml_file_path = xml_file_path
         self.struct_file_path = struct_file_path
-        super().__init__(template=template, includes=["struct.h"], struct_file_path=struct_file_path, xml_file_path=xml_file_path)
+        super().__init__(
+            template=template,
+            includes=["struct.h"],
+            struct_file_path=struct_file_path,
+            xml_file_path=xml_file_path,
+        )
 
     def generate(self, config: dict):
         if not self.struct_file_path:
@@ -82,7 +87,7 @@ fmi3Instance fmi3InstantiateCoSimulation(
     def generate_custom_code(self, variables, struct_name):
         custom_code = ""
         custom_code += f"{struct_name} *fmu = new {struct_name}();\n"
-        
+
         # Reverse the list
         variables = variables[::-1]
         variables.remove("time")
@@ -96,14 +101,16 @@ fmi3Instance fmi3InstantiateCoSimulation(
             else:
                 custom_code += f"fmu->{variables[0]}->{variable}(fmu->s_{variable});\n"
         return custom_code
-    
+
     def generate_custom_code_tlm(self, variables, struct_name):
         custom_code = ""
         custom_code += f"{struct_name} *fmu = new {struct_name}();\n"
         # Reverse the list
         variables = variables[::-1]
         tlm_module_name: str = "_".join(variables[0].split("_")[1:])
-        custom_code += f'fmu->{variables[0]} = new {tlm_module_name}("{tlm_module_name}");\n'
+        custom_code += (
+            f'fmu->{variables[0]} = new {tlm_module_name}("{tlm_module_name}");\n'
+        )
         custom_code += f"fmu->current_time = sc_time(0, SC_NS);\n"
         return custom_code
 

@@ -50,7 +50,7 @@ class fmi3GetString(BaseFMI3Module):
         else:
             enum_definitions = ""
             custom_code = ""
-            
+
         self.template = self.template.format(
             custom_code=custom_code, enum_definitions=enum_definitions
         )

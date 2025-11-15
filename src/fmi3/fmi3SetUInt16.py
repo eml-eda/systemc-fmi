@@ -6,10 +6,13 @@ class fmi3SetUInt16(BaseFMI3Setter):
         super().__init__(
             var_type="UInt16",
             struct_file_path=struct_file_path,
-            xml_file_path=xml_file_path
+            xml_file_path=xml_file_path,
         )
+
 
 if __name__ == "__main__":
     """Test the generator"""
-    generator = fmi3SetUInt16(struct_file_path="prova_struct.h", xml_file_path="modelDescription.xml")
+    generator = fmi3SetUInt16(
+        struct_file_path="prova_struct.h", xml_file_path="modelDescription.xml"
+    )
     print(generator.generate())

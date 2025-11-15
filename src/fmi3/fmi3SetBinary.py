@@ -129,5 +129,7 @@ class fmi3SetBinary(BaseFMI3Module):
 
 if __name__ == "__main__":
     """Test the generator"""
-    generator = fmi3SetBinary(struct_file_path="prova_struct.h", xml_file_path="modelDescription.xml")
+    generator = fmi3SetBinary(
+        struct_file_path="prova_struct.h", xml_file_path="modelDescription.xml"
+    )
     print(generator.generate())

@@ -1,0 +1,10 @@
+FMPy==0.3.21
+Jinja2==3.1.5
+matplotlib==3.10.0
+memory-profiler==0.61.0
+memray==1.15.0
+numpy==2.2.2
+pandas==2.2.3
+snakeviz==2.2.2
+PyYAML==6.0.2
+pytest==8.3.5
