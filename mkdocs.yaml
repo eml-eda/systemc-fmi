@@ -50,3 +50,4 @@ markdown_extensions:
 
 nav:
   - Overview: index.md
+  - Cite: cite.md
